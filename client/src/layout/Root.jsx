@@ -1,13 +1,14 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useHref } from "react-router-dom";
 import Footer from "../pages/shared/footer/Footer";
 import Navbar from "../pages/shared/navbar/Navbar";
 
 const Root = () => {
+  const route = useHref();
   return (
     <>
       <Navbar />
       <Outlet />
-      <Footer />
+      {route === `/sign-up` || route === `/sign-in` ? null : <Footer />}
     </>
   );
 };
