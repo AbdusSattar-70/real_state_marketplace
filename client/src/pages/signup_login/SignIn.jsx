@@ -85,7 +85,11 @@ const SignIn = () => {
               {error && <div className="text-red-600">{error?.message}</div>}
             </div>
             <div className="form-control mt-6">
-              <input type="submit" value="signup" className="btn btn-primary" />
+              <input
+                type="submit"
+                value="sign in"
+                className="btn btn-primary"
+              />
             </div>
           </form>
           <p className="text-center text-bold my-4">

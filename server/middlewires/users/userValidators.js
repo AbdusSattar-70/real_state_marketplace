@@ -5,10 +5,18 @@ const User = require('../../models/User.model');
 const addUserValidators = [
   check('userName')
     .isLength({ min: 1 })
-    .withMessage('userName is required')
-    .isAlpha('en-US', { ignore: ' -' })
-    .withMessage('Name must not contain anything other than alphabet')
-    .trim(),
+    .withMessage('User Name is required')
+    .trim()
+    .custom(async (value) => {
+      try {
+        const user = await User.findOne({ userName: value });
+        if (user) {
+          throw Error('User Name already is used!');
+        }
+      } catch (err) {
+        throw Error(err.message);
+      }
+    }),
   check('email')
     .isEmail()
     .withMessage('Invalid email address')
@@ -17,7 +25,7 @@ const addUserValidators = [
       try {
         const user = await User.findOne({ email: value });
         if (user) {
-          throw Error('Email already is use!');
+          throw Error('Email already is used!');
         }
       } catch (err) {
         throw Error(err.message);
@@ -36,10 +44,7 @@ const addUserValidationHandler = (req, res, next) => {
   if (Object.keys(mappedErrors).length === 0) {
     next();
   } else {
-    // response the errors
-    res.status(500).json({
-      errors: mappedErrors,
-    });
+    res.status(500).json({ errors: mappedErrors });
   }
 };
 
